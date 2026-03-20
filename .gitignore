@@ -53,3 +53,10 @@ next-env.d.ts
 PLAN.md
 CODE-REVIEW*.md
 *.docx
+CANDIDATE-COMPARISON.md
+
+# OTC internal tooling — never commit to public repos
+.semgrep/
+.github/workflows/quality-gate.yml
+.github/workflows/nightly-scan.yml
+.github/workflows/weekly-deep-scan.yml
