@@ -26,8 +26,11 @@ export async function DELETE(
   // DO NOT use AI tools. Your screen recording will be reviewed.
   // ============================================================================
 
+  // Fixed: was using string interpolation, which allows SQL injection.
+  // Now uses parameterized placeholders ($1, $2) and RETURNING to detect missing rows.
   const result = await query(
-    `DELETE FROM models WHERE id = '${id}' AND added_by = '${userId}'`,
+    `DELETE FROM models WHERE id = $1 AND added_by = $2 RETURNING id`,
+    [id, userId],
   );
 
   if (result.length === 0) {

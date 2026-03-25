@@ -25,7 +25,23 @@ export default async function DashboardPage() {
   // DO NOT use AI tools. Your screen recording will be reviewed.
   // ============================================================
 
-  const models: ModelWithProvider[] = []; // TODO: Replace with your query
+  const models = await query<ModelWithProvider>(
+    `SELECT
+      m.*,
+      p.name AS provider_name,
+      p.website AS provider_website
+    FROM models m
+    JOIN providers p ON p.id = m.provider_id
+    WHERE m.added_by = $1
+    ORDER BY
+      CASE m.status
+        WHEN 'evaluating' THEN 1
+        WHEN 'approved' THEN 2
+        WHEN 'deprecated' THEN 3
+      END,
+      m.created_at DESC`,
+    [userId],
+  );
 
   const providers = await query<Provider>(
     'SELECT id, name, website FROM providers ORDER BY name',
